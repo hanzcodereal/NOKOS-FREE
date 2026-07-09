@@ -1,0 +1,21 @@
+{
+  "name": "nokos-free",
+  "version": "1.0.0",
+  "description": "NOKOS FREE - NOMER KOSONG FREE",
+  "main": "api/nokos.js",
+  "scripts": {
+    "start": "node api/nokos.js",
+    "dev": "node api/nokos.js"
+  },
+  "keywords": [
+    "otp",
+    "nomer kosong",
+    "nokos"
+  ],
+  "author": "Hanzcode",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5"
+  }
+}

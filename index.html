@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>NOKOS FREE</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #000000;
+            color: #ffffff;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 1rem;
+            line-height: 1.5;
+        }
+
+        #app {
+            width: 100%;
+            max-width: 720px;
+            margin: 0 auto;
+        }
+
+        .header {
+            width: 100%;
+            padding: 0.75rem 0 1.5rem 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .header h1 {
+            font-size: 1.4rem;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+            color: #ffffff;
+        }
+
+        .controls {
+            width: 100%;
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 1.75rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .controls button {
+            background: #1e1e1e;
+            color: #ffffff;
+            border: none;
+            padding: 0.6rem 1.4rem;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            font-weight: 400;
+            cursor: pointer;
+            transition: background 0.15s ease;
+            flex: 1 1 auto;
+            min-width: 100px;
+            letter-spacing: 0.3px;
+        }
+
+        .controls button:hover {
+            background: #2c2c2c;
+        }
+
+        .controls button:active {
+            background: #3a3a3a;
+        }
+
+        .controls button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .limit-input-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: #111;
+            padding: 0.2rem 0.2rem 0.2rem 0.8rem;
+            border-radius: 40px;
+            flex: 1 1 auto;
+            min-width: 140px;
+            border: 1px solid #2a2a2a;
+        }
+
+        .limit-input-group label {
+            color: #999;
+            font-size: 0.8rem;
+            letter-spacing: 0.3px;
+        }
+
+        .limit-input-group input {
+            background: transparent;
+            border: none;
+            color: #fff;
+            font-size: 0.95rem;
+            width: 60px;
+            padding: 0.4rem 0;
+            outline: none;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .limit-input-group input::-webkit-outer-spin-button,
+        .limit-input-group input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        .limit-input-group input[type=number] {
+            -moz-appearance: textfield;
+        }
+
+        .limit-input-group .action-btn {
+            background: #1e1e1e;
+            border: none;
+            color: #fff;
+            padding: 0.3rem 1rem;
+            border-radius: 40px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: background 0.15s;
+            white-space: nowrap;
+        }
+
+        .limit-input-group .action-btn:hover {
+            background: #2c2c2c;
+        }
+
+        .limit-input-group .action-btn:active {
+            background: #3a3a3a;
+        }
+
+        .limit-input-group .action-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .stats {
+            width: 100%;
+            padding: 0.5rem 0 0.25rem 0;
+            font-size: 0.9rem;
+            color: #bbbbbb;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        .otp-list {
+            width: 100%;
+            margin-top: 1.2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            padding-bottom: 2.5rem;
+        }
+
+        .otp-card {
+            background: #0d0d0d;
+            padding: 1rem 1.2rem;
+            border-radius: 12px;
+            border: none;
+            box-shadow: 0 1px 3px rgba(255, 255, 255, 0.03);
+            transition: background 0.1s;
+        }
+
+        .otp-card .row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: baseline;
+            gap: 0.25rem 0.5rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .otp-card .row:last-child {
+            margin-bottom: 0;
+        }
+
+        .label {
+            color: #888888;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            min-width: 58px;
+        }
+
+        .value {
+            color: #ffffff;
+            word-break: break-word;
+            font-size: 0.95rem;
+        }
+
+        .value.otp-code {
+            background: #1a1a1a;
+            padding: 0.15rem 0.6rem;
+            border-radius: 24px;
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            font-weight: 500;
+            font-size: 0.95rem;
+            letter-spacing: 0.3px;
+            color: #ffffff;
+        }
+
+        .value.link-msg {
+            color: #a0c0ff;
+            word-break: break-all;
+        }
+
+        .otp-card .message {
+            margin-top: 0.4rem;
+            padding-top: 0.4rem;
+            border-top: 1px solid #1e1e1e;
+            color: #cccccc;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            word-break: break-word;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 2.5rem 1rem;
+            color: #666666;
+            font-size: 1rem;
+        }
+
+        .warning-state {
+            text-align: center;
+            padding: 2.5rem 1rem;
+            color: #ffaa00;
+            font-size: 1rem;
+            border: 1px solid #ffaa00;
+            border-radius: 12px;
+            background: #1a1a00;
+        }
+
+        .footer-note {
+            margin-top: 0.5rem;
+            font-size: 0.7rem;
+            color: #444444;
+            text-align: center;
+            width: 100%;
+            padding: 0.5rem 0;
+        }
+
+        .footer-links {
+            margin-top: 0.3rem;
+            font-size: 0.7rem;
+            text-align: center;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: #666666;
+            text-decoration: none;
+            transition: color 0.15s ease;
+            cursor: pointer;
+        }
+
+        .footer-links a:hover {
+            color: #ffffff;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-overlay {
+            display: none;
+            text-align: center;
+            padding: 2rem 1rem;
+            color: #888888;
+        }
+
+        .loading-overlay.active {
+            display: block;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            border: 3px solid #1e1e1e;
+            border-radius: 50%;
+            border-top-color: #ffffff;
+            animation: spin 0.8s linear infinite;
+            margin-bottom: 0.8rem;
+        }
+
+        .loading-text {
+            font-size: 0.9rem;
+            color: #666666;
+        }
+
+        @media (max-width: 480px) {
+            .header h1 { font-size: 1.2rem; }
+            .controls button { font-size: 0.8rem; padding: 0.5rem 1rem; }
+            .otp-card { padding: 0.9rem 1rem; }
+            .limit-input-group { min-width: 120px; }
+            .footer-links { gap: 1rem; }
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <div class="header">
+        <h1>NOKOS FREE</h1>
+    </div>
+
+    <div class="controls">
+        <div class="limit-input-group">
+            <label for="limitInput">limit</label>
+            <input type="number" id="limitInput" value="100" min="1" step="1">
+            <button class="action-btn" id="applyLimitBtn">ambil</button>
+            <button class="action-btn" id="fetchBtn">refresh</button>
+        </div>
+    </div>
+
+    <div class="stats" id="statsBar">
+        <span id="countDisplay">limit: 0</span>
+        <span id="serverTotal">total: —</span>
+    </div>
+
+    <div id="otpContainer" class="otp-list">
+        <div class="empty-state">↻ tap refresh to load OTPs</div>
+    </div>
+
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">memuat data...</div>
+    </div>
+
+    <div class="footer-note">Developer | Hanzcode</div>
+    <div class="footer-links">
+        <a href="mailto:hanzzcodee@gmail.com">📧 email</a>
+        <a href="https://saweria.co/hanzreally" target="_blank">☕ support</a>
+    </div>
+</div>
+
+<script>
+    (function() {
+        "use strict";
+
+        const container = document.getElementById('otpContainer');
+        const countDisplay = document.getElementById('countDisplay');
+        const serverTotalSpan = document.getElementById('serverTotal');
+        const limitInput = document.getElementById('limitInput');
+        const applyLimitBtn = document.getElementById('applyLimitBtn');
+        const fetchBtn = document.getElementById('fetchBtn');
+        const loadingOverlay = document.getElementById('loadingOverlay');
+
+        let totalDataServer = null;
+
+        function renderOTPs(otps, totalServer) {
+            totalDataServer = totalServer;
+
+            if (!otps || otps.length === 0) {
+                container.innerHTML = `<div class="empty-state">⏳ no OTP data available</div>`;
+                countDisplay.textContent = `limit: 0`;
+                serverTotalSpan.textContent = `total: ${totalServer ?? '—'}`;
+                return;
+            }
+
+            let requestedLimit = parseInt(limitInput.value, 10);
+            if (isNaN(requestedLimit) || requestedLimit < 1) {
+                requestedLimit = 100;
+            }
+
+            if (totalServer !== null && totalServer !== undefined && requestedLimit > totalServer) {
+                container.innerHTML = `
+                    <div class="warning-state">
+                        ⚠️ limit ${requestedLimit} melebihi total data ${totalServer}<br>
+                        <span style="font-size:0.8rem;color:#888;">menampilkan ${totalServer} data yang tersedia</span>
+                    </div>
+                `;
+                countDisplay.textContent = `limit: ${otps.length} (dari ${totalServer})`;
+                serverTotalSpan.textContent = `total: ${totalServer}`;
+                return;
+            }
+
+            let html = '';
+            otps.forEach((item) => {
+                const time = item.time || '—';
+                const flag = item.flag || '';
+                const country = item.country || '—';
+                const number = item.number ? `+${item.number}` : '—';
+                const masked = item.masked_number || '—';
+                const sender = item.sender || '—';
+                let otpValue = item.otp ? item.otp : 'tidak ada OTP (link)';
+                const message = item.message ? item.message.replace(/\\n/g, ' ') : '—';
+
+                const otpClass = (item.otp) ? 'value otp-code' : 'value link-msg';
+
+                html += `
+                    <div class="otp-card">
+                        <div class="row">
+                            <span class="label">waktu</span>
+                            <span class="value">${time}</span>
+                        </div>
+                        <div class="row">
+                            <span class="label">negara</span>
+                            <span class="value">${flag} ${country}</span>
+                        </div>
+                        <div class="row">
+                            <span class="label">nomor</span>
+                            <span class="value">${number} <span style="color:#666;font-size:0.8rem;">(masked: ${masked})</span></span>
+                        </div>
+                        <div class="row">
+                            <span class="label">pengirim</span>
+                            <span class="value">${sender}</span>
+                        </div>
+                        <div class="row">
+                            <span class="label">OTP</span>
+                            <span class="${otpClass}">${otpValue}</span>
+                        </div>
+                        <div class="message">${message}</div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+            countDisplay.textContent = `limit: ${otps.length}`;
+            if (totalServer !== undefined && totalServer !== null) {
+                serverTotalSpan.textContent = `total: ${totalServer}`;
+            } else {
+                serverTotalSpan.textContent = `total: —`;
+            }
+        }
+
+        function setLoadingState(isLoading) {
+            if (isLoading) {
+                fetchBtn.disabled = true;
+                applyLimitBtn.disabled = true;
+                loadingOverlay.classList.add('active');
+                container.style.display = 'none';
+            } else {
+                fetchBtn.disabled = false;
+                applyLimitBtn.disabled = false;
+                loadingOverlay.classList.remove('active');
+                container.style.display = 'flex';
+            }
+        }
+
+        async function asyncGetOTPs(limit = 100) {
+            let safeLimit = parseInt(limit, 10);
+            if (isNaN(safeLimit) || safeLimit < 1) safeLimit = 1;
+            limitInput.value = safeLimit;
+
+            setLoadingState(true);
+
+            const url = `/api/otps?limit=${safeLimit}`;
+            try {
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'User-Agent': 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Mobile Safari/537.36',
+                        'Accept': 'application/json'
+                    }
+                });
+                if (!response.ok) {
+                    throw new Error(`HTTP Error! Status: ${response.status}`);
+                }
+                const data = await response.json();
+                if (data.success && data.otps) {
+                    const total = data.total ?? data.otps.length;
+                    renderOTPs(data.otps, total);
+                    return data.otps;
+                } else {
+                    container.innerHTML = `<div class="empty-state">⚠️ format JSON tidak sesuai</div>`;
+                    countDisplay.textContent = 'limit: 0';
+                    serverTotalSpan.textContent = 'total: —';
+                    return null;
+                }
+            } catch (error) {
+                container.innerHTML = `<div class="empty-state">❌ error: ${error.message}</div>`;
+                countDisplay.textContent = 'limit: 0';
+                serverTotalSpan.textContent = 'total: —';
+                console.error('Scraping error:', error.message);
+                return null;
+            } finally {
+                setLoadingState(false);
+            }
+        }
+
+        function loadDefault() {
+            asyncGetOTPs(100);
+        }
+
+        applyLimitBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const val = parseInt(limitInput.value, 10);
+            asyncGetOTPs(val || 100);
+        });
+
+        fetchBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const val = parseInt(limitInput.value, 10);
+            asyncGetOTPs(val || 100);
+        });
+
+        limitInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                const val = parseInt(limitInput.value, 10);
+                asyncGetOTPs(val || 100);
+            }
+        });
+
+        window.addEventListener('load', function() {
+            loadDefault();
+        });
+    })();
+</script>
+</body>
+</html>
