@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
+const axios = require('axios');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -16,26 +17,50 @@ app.get('/', (req, res) => {
 app.get('/api/otps', async (req, res) => {
     try {
         const limit = parseInt(req.query.limit) || 100;
-        const response = await fetch(`https://weak-deloris-nothing672434-fe85179d.koyeb.app/api/otps?limit=${limit}`, {
-            method: 'GET',
+        
+        const response = await axios.get('https://weak-deloris-nothing672434-fe85179d.koyeb.app/api/otps', {
+            params: { limit: limit },
             headers: {
-                'User-Agent': 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Mobile Safari/537.36',
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
                 'Accept': 'application/json'
             }
         });
 
-        if (!response.ok) {
-            throw new Error(`HTTP Error! Status: ${response.status}`);
+        if (response.data && response.data.success) {
+            res.json(response.data);
+        } else {
+            res.status(404).json({ 
+                success: false, 
+                error: 'Data not found',
+                message: 'API endpoint returned invalid response'
+            });
         }
-
-        const data = await response.json();
-        res.json(data);
     } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
+        console.error('API Error:', error.message);
+        
+        if (error.response) {
+            res.status(error.response.status).json({
+                success: false,
+                error: `API Error: ${error.response.status}`,
+                message: error.response.data?.message || 'External API error'
+            });
+        } else if (error.request) {
+            res.status(503).json({
+                success: false,
+                error: 'Service Unavailable',
+                message: 'Cannot connect to external API'
+            });
+        } else {
+            res.status(500).json({
+                success: false,
+                error: 'Internal Server Error',
+                message: error.message
+            });
+        }
     }
 });
 
 app.listen(PORT, () => {
-    console.log(`NOKOS FREE Server Running`);
-    console.log(`Access the application in your browser`);
+    console.log('NOKOS FREE Server Running');
+    console.log('Access the application in your browser');
 });
