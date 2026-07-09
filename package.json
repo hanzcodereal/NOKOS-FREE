@@ -1,7 +1,7 @@
 {
   "name": "nokos-free",
   "version": "1.0.0",
-  "description": "NOKOS FREE - NOMER KOSONG FREE",
+  "description": "NOKOS FREE - OTP Viewer Application",
   "main": "api/nokos.js",
   "scripts": {
     "start": "node api/nokos.js",
@@ -9,13 +9,14 @@
   },
   "keywords": [
     "otp",
-    "nomer kosong",
+    "viewer",
     "nokos"
   ],
   "author": "Hanzcode",
   "license": "MIT",
   "dependencies": {
     "express": "^4.18.2",
-    "cors": "^2.8.5"
+    "cors": "^2.8.5",
+    "axios": "^1.6.0"
   }
 }
